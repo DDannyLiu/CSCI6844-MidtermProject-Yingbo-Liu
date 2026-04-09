@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "dgSpecHash": "+N2Uc7HtAUI=",
+  "success": true,
+  "projectFilePath": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/ApiGateway/ApiGateway.csproj",
+  "expectedPackageFiles": [
+    "/Users/yingboliu/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/ipaddressrange/6.3.0/ipaddressrange.6.3.0.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/microsoft.aspnetcore.jsonpatch/9.0.11/microsoft.aspnetcore.jsonpatch.9.0.11.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/microsoft.aspnetcore.middlewareanalysis/9.0.11/microsoft.aspnetcore.middlewareanalysis.9.0.11.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/9.0.11/microsoft.aspnetcore.mvc.newtonsoftjson.9.0.11.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/microsoft.aspnetcore.openapi/10.0.1/microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/microsoft.extensions.apidescription.server/10.0.0/microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/microsoft.extensions.diagnosticadapter/3.1.32/microsoft.extensions.diagnosticadapter.3.1.32.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/microsoft.openapi/2.4.1/microsoft.openapi.2.4.1.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/newtonsoft.json.bson/1.0.2/newtonsoft.json.bson.1.0.2.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/ocelot/24.1.0/ocelot.24.1.0.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/ocelot.provider.polly/24.1.0/ocelot.provider.polly.24.1.0.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/polly/8.6.5/polly.8.6.5.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/polly.core/8.6.5/polly.core.8.6.5.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/swashbuckle.aspnetcore/10.1.7/swashbuckle.aspnetcore.10.1.7.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/swashbuckle.aspnetcore.swagger/10.1.7/swashbuckle.aspnetcore.swagger.10.1.7.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/swashbuckle.aspnetcore.swaggergen/10.1.7/swashbuckle.aspnetcore.swaggergen.10.1.7.nupkg.sha512",
+    "/Users/yingboliu/.nuget/packages/swashbuckle.aspnetcore.swaggerui/10.1.7/swashbuckle.aspnetcore.swaggerui.10.1.7.nupkg.sha512"
+  ],
+  "logs": []
+}

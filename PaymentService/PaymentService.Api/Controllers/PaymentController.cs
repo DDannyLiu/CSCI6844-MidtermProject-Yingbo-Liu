@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PaymentService.Api.Data;
+using PaymentService.Api.DTOs; // NEW: 引入 DTO
 using PaymentService.Api.Models;
 
 namespace PaymentService.Api.Controllers;
@@ -17,22 +18,41 @@ public class PaymentController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Payment>> GetById(int id)
+    public async Task<ActionResult<PaymentDto>> GetById(int id) // CHANGED: 返回 PaymentDto，不再直接返回 entity
     {
         var payment = await _context.Payments.FindAsync(id);
 
         if (payment == null)
             return NotFound();
 
-        return Ok(payment);
+        // NEW: Entity -> DTO
+        var result = new PaymentDto
+        {
+            Id = payment.Id,
+            OrderId = payment.OrderId,
+            Amount = payment.Amount,
+        };
+
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Payment payment)
+    public async Task<IActionResult> Create(CreatePaymentDto dto) // CHANGED: 不再接收 Payment entity
     {
+        // NEW: DTO -> Entity
+        var payment = new Payment { OrderId = dto.OrderId, Amount = dto.Amount };
+
         await _context.Payments.AddAsync(payment);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetById), new { id = payment.Id }, payment);
+        // NEW: 返回 DTO
+        var result = new PaymentDto
+        {
+            Id = payment.Id,
+            OrderId = payment.OrderId,
+            Amount = payment.Amount,
+        };
+
+        return CreatedAtAction(nameof(GetById), new { id = payment.Id }, result);
     }
 }

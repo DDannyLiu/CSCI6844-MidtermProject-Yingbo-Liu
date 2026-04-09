@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eJ6qCPHxg8k=",
+  "dgSpecHash": "8WGItikawz8=",
   "success": true,
-  "projectFilePath": "/Users/yingboliu/Desktop/DistributedDataAccessLab/CustomerService/CustomerService.Api/CustomerService.Api.csproj",
+  "projectFilePath": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/CustomerService/CustomerService.Api/CustomerService.Api.csproj",
   "expectedPackageFiles": [
     "/Users/yingboliu/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/yingboliu/.nuget/packages/microsoft.aspnetcore.openapi/10.0.1/microsoft.aspnetcore.openapi.10.0.1.nupkg.sha512",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/yingboliu/Desktop/DistributedDataAccessLab/OrderService/OrderService.Api/OrderService.Api.csproj": {}
+    "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/OrderService/OrderService.Api/OrderService.Api.csproj": {}
   },
   "projects": {
-    "/Users/yingboliu/Desktop/DistributedDataAccessLab/OrderService/OrderService.Api/OrderService.Api.csproj": {
+    "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/OrderService/OrderService.Api/OrderService.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/yingboliu/Desktop/DistributedDataAccessLab/OrderService/OrderService.Api/OrderService.Api.csproj",
+        "projectUniqueName": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/OrderService/OrderService.Api/OrderService.Api.csproj",
         "projectName": "OrderService.Api",
-        "projectPath": "/Users/yingboliu/Desktop/DistributedDataAccessLab/OrderService/OrderService.Api/OrderService.Api.csproj",
+        "projectPath": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/OrderService/OrderService.Api/OrderService.Api.csproj",
         "packagesPath": "/Users/yingboliu/.nuget/packages/",
-        "outputPath": "/Users/yingboliu/Desktop/DistributedDataAccessLab/OrderService/OrderService.Api/obj/",
+        "outputPath": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/OrderService/OrderService.Api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/yingboliu/.nuget/NuGet/NuGet.Config"
@@ -62,9 +62,13 @@
               "target": "Package",
               "version": "[10.0.3, )"
             },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.8.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[10.1.2, )"
+              "version": "[10.1.7, )"
             }
           },
           "imports": [

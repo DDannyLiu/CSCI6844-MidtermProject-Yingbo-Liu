@@ -2923,11 +2923,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/yingboliu/Desktop/DistributedDataAccessLab/CustomerService/CustomerService.Api/CustomerService.Api.csproj",
+      "projectUniqueName": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/CustomerService/CustomerService.Api/CustomerService.Api.csproj",
       "projectName": "CustomerService.Api",
-      "projectPath": "/Users/yingboliu/Desktop/DistributedDataAccessLab/CustomerService/CustomerService.Api/CustomerService.Api.csproj",
+      "projectPath": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/CustomerService/CustomerService.Api/CustomerService.Api.csproj",
       "packagesPath": "/Users/yingboliu/.nuget/packages/",
-      "outputPath": "/Users/yingboliu/Desktop/DistributedDataAccessLab/CustomerService/CustomerService.Api/obj/",
+      "outputPath": "/Users/yingboliu/Desktop/CSCI_6844_MidtermProject_Yingbo_Liu/CustomerService/CustomerService.Api/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/yingboliu/.nuget/NuGet/NuGet.Config"
