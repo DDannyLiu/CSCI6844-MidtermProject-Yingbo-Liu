@@ -3,35 +3,57 @@ using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// NEW: 读取 Ocelot 配置文件
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
-// NEW: Ocelot services
 builder.Services.AddOcelot();
-
-// NEW: Swagger services
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// NEW: 给 aggregation controller 用的 HttpClient
 builder.Services.AddHttpClient();
-
-// NEW: 启用 controller（比如 OrderDetailsController）
 builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowFrontend",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:5246", "http://localhost:8081")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+    );
+});
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.DocInclusionPredicate(
+        (docName, apiDesc) =>
+        {
+            var path = apiDesc.RelativePath ?? "";
+
+            if (path.StartsWith("configuration"))
+                return false;
+
+            if (path.StartsWith("outputcache"))
+                return false;
+
+            return true;
+        }
+    );
+});
 
 var app = builder.Build();
 
-// NEW: Swagger UI
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseCors("AllowFrontend");
 
-// NEW: 先映射你自己的 controller 路由
-// 例如：/aggregate/orderdetails/{id}
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.DefaultModelsExpandDepth(-1);
+});
+
 app.MapControllers();
 
-// IMPORTANT:
-// 这里只让 Ocelot 处理 /gateway 开头的请求
-// 这样 /aggregate/... 不会再被 Ocelot 抢走
 app.MapWhen(
     context => context.Request.Path.StartsWithSegments("/gateway"),
     gatewayApp =>

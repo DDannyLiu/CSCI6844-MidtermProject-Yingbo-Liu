@@ -1,5 +1,5 @@
 using CustomerService.Api.Data;
-using CustomerService.Api.DTOs; // NEW: 引入 DTO
+using CustomerService.Api.DTOs;
 using CustomerService.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +17,29 @@ public class CustomersController : ControllerBase
         _context = context;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var customers = await _context
+            .Customers.Select(c => new CustomerDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Email = c.Email,
+            })
+            .ToListAsync();
+
+        return Ok(customers);
+    }
+
     [HttpGet("{id}")]
-    public async Task<ActionResult<CustomerDto>> GetById(int id) // CHANGED: 返回 CustomerDto，不再直接返回 Customer entity
+    public async Task<ActionResult<CustomerDto>> GetById(int id)
     {
         var customer = await _context.Customers.FindAsync(id);
 
         if (customer == null)
             return NotFound();
 
-        // CHANGED: Entity -> DTO
         var result = new CustomerDto
         {
             Id = customer.Id,
@@ -37,15 +51,13 @@ public class CustomersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateCustomerDto dto) // CHANGED: 不再直接接收 Customer entity，改为接收 CreateCustomerDto
+    public async Task<IActionResult> Create(CreateCustomerDto dto)
     {
-        // NEW: DTO -> Entity
         var customer = new Customer { Name = dto.Name, Email = dto.Email };
 
         await _context.Customers.AddAsync(customer);
         await _context.SaveChangesAsync();
 
-        // NEW: 返回 DTO，而不是直接返回 entity
         var result = new CustomerDto
         {
             Id = customer.Id,

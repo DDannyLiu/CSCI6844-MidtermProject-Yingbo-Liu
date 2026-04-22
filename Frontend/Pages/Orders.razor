@@ -1,0 +1,164 @@
+@page "/orders"
+@using Frontend.Models
+@using Frontend.Services
+@inject ApiService Api
+
+<h3 class="mb-4">Orders</h3>
+
+<p class="text-muted">Create new orders and review existing orders through the API Gateway.</p>
+
+<div class="card p-4 mb-4">
+    <div class="mb-3">
+        <label class="form-label">Total</label>
+        <input class="form-control" type="number" step="0.01" @bind="newOrder.Total" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Customer</label>
+        <select class="form-select" @bind="newOrder.CustomerId">
+            <option value="0">Select Customer</option>
+            @if (customers != null)
+            {
+                @foreach (var customer in customers)
+                {
+                    <option value="@customer.Id">@customer.Name (@customer.Id)</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Product</label>
+        <select class="form-select" @bind="newOrder.ProductId">
+            <option value="0">Select Product</option>
+            @if (products != null)
+            {
+                @foreach (var product in products)
+                {
+                    <option value="@product.Id">@product.Name (@product.Id)</option>
+                }
+            }
+        </select>
+    </div>
+
+    <button class="btn btn-primary" @onclick="CreateOrder">Create Order</button>
+</div>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert @(isSuccess ? "alert-success" : "alert-danger")" role="alert">
+        @message
+    </div>
+}
+
+@if (orders == null)
+{
+    <p>Loading...</p>
+}
+else if (orders.Count == 0)
+{
+    <p>No orders found.</p>
+}
+else
+{
+    <p class="text-muted">Showing @orders.Count orders.</p>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Total</th>
+                <th>Customer ID</th>
+                <th>Product ID</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>$@order.Total</td>
+                    <td>@order.CustomerId</td>
+                    <td>@order.ProductId</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" @onclick="() => CancelOrder(order.Id)">
+                            Cancel
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<OrderDto>? orders;
+    private List<CustomerDto>? customers;
+    private List<ProductDto>? products;
+
+    private CreateOrderDto newOrder = new();
+    private string? message;
+    private bool isSuccess;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        orders = await Api.GetOrdersAsync();
+        customers = await Api.GetCustomersAsync();
+        products = await Api.GetProductsAsync();
+    }
+
+    private async Task CreateOrder()
+    {
+        if (newOrder.CustomerId == 0 || newOrder.ProductId == 0)
+        {
+            message = "Please select a customer and a product.";
+            isSuccess = false;
+            return;
+        }
+
+        if (newOrder.Total <= 0)
+        {
+            message = "Total must be greater than 0.";
+            isSuccess = false;
+            return;
+        }
+
+        var response = await Api.CreateOrderAsync(newOrder);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Order created successfully.";
+            isSuccess = true;
+            newOrder = new CreateOrderDto();
+            await LoadData();
+        }
+        else
+        {
+            message = await response.Content.ReadAsStringAsync();
+            isSuccess = false;
+        }
+    }
+
+    private async Task CancelOrder(int id)
+    {
+        var response = await Api.CancelOrderAsync(id);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message = $"Order #{id} cancelled successfully.";
+            isSuccess = true;
+            await LoadData();
+        }
+        else
+        {
+            message = await response.Content.ReadAsStringAsync();
+            isSuccess = false;
+        }
+    }
+}

@@ -1,0 +1,100 @@
+@page "/customers"
+@using Frontend.Models
+@using Frontend.Services
+@inject ApiService Api
+
+<h3 class="mb-4">Customers</h3>
+
+<p class="text-muted">View customers and add a new customer.</p>
+
+<div class="card p-4 mb-4">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input class="form-control" @bind="newCustomer.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input class="form-control" @bind="newCustomer.Email" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="CreateCustomer">Add Customer</button>
+</div>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert @(isSuccess ? "alert-success" : "alert-danger")" role="alert">
+        @message
+    </div>
+}
+
+@if (customers == null)
+{
+    <p>Loading...</p>
+}
+else if (customers.Count == 0)
+{
+    <p>No customers found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.Name</td>
+                    <td>@customer.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CustomerDto>? customers;
+    private CustomerDto newCustomer = new();
+    private string? message;
+    private bool isSuccess;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCustomers();
+    }
+
+    private async Task LoadCustomers()
+    {
+        customers = await Api.GetCustomersAsync();
+    }
+
+    private async Task CreateCustomer()
+    {
+        if (string.IsNullOrWhiteSpace(newCustomer.Name) || string.IsNullOrWhiteSpace(newCustomer.Email))
+        {
+            message = "Name and email are required.";
+            isSuccess = false;
+            return;
+        }
+
+        var response = await Api.CreateCustomerAsync(newCustomer);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message = "Customer added successfully.";
+            isSuccess = true;
+            newCustomer = new CustomerDto();
+            await LoadCustomers();
+        }
+        else
+        {
+            message = await response.Content.ReadAsStringAsync();
+            isSuccess = false;
+        }
+    }
+}

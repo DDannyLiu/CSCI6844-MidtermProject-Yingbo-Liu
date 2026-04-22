@@ -14,11 +14,19 @@ public class OrderDetailsController : ControllerBase
         _httpClient = httpClient;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAllOrders()
+    {
+        var response = await _httpClient.GetAsync("http://orderservice:8080/api/orders");
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        return StatusCode((int)response.StatusCode, content);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOrderDetails(int id)
     {
-        Console.WriteLine("=== NEW CONTROLLER VERSION ===");
-
         var orderResponse = await _httpClient.GetAsync("http://orderservice:8080/api/orders");
 
         if (!orderResponse.IsSuccessStatusCode)
@@ -34,35 +42,64 @@ public class OrderDetailsController : ControllerBase
         if (order == null)
             return NotFound("Order not found.");
 
-        // customer
         var customerResponse = await _httpClient.GetAsync(
             $"http://customerservice:8080/api/customers/{order.CustomerId}"
         );
 
         var customerJson = await customerResponse.Content.ReadAsStringAsync();
-        var customer = JsonDocument.Parse(customerJson).RootElement.Clone(); // ⭐ FIX
 
-        // product
         var productResponse = await _httpClient.GetAsync(
             $"http://productservice:8080/api/products/{order.ProductId}"
         );
 
         var productJson = await productResponse.Content.ReadAsStringAsync();
-        var product = JsonDocument.Parse(productJson).RootElement.Clone(); // ⭐ FIX
 
         return Content(
             $@"{{
-        ""order"": {JsonSerializer.Serialize(order)},
-        ""customer"": {customerJson},
-        ""product"": {productJson}
-    }}",
+    ""order"": {JsonSerializer.Serialize(order)},
+    ""customer"": {customerJson},
+    ""product"": {productJson}
+}}",
             "application/json"
         );
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "http://orderservice:8080/api/orders",
+            dto
+        );
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        return StatusCode((int)response.StatusCode, content);
+    }
+
+    [HttpPost("cancel/{id}")]
+    public async Task<IActionResult> CancelOrder(int id)
+    {
+        var response = await _httpClient.PostAsync(
+            $"http://orderservice:8080/api/orders/cancel/{id}",
+            null
+        );
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        return StatusCode((int)response.StatusCode, content);
     }
 
     private class OrderDto
     {
         public int Id { get; set; }
+        public decimal Total { get; set; }
+        public int CustomerId { get; set; }
+        public int ProductId { get; set; }
+    }
+
+    public class CreateOrderDto
+    {
         public decimal Total { get; set; }
         public int CustomerId { get; set; }
         public int ProductId { get; set; }

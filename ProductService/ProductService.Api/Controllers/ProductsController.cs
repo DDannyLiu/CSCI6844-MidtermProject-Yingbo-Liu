@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Api.Data;
-using ProductService.Api.DTOs; // NEW: 引入 DTO
+using ProductService.Api.DTOs;
 using ProductService.Api.Models;
 
 namespace ProductService.Api.Controllers;
@@ -17,15 +17,30 @@ public class ProductsController : ControllerBase
         _context = context;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var products = await _context
+            .Products.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Stock = p.Stock,
+            })
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProductDto>> GetById(int id) // CHANGED: 返回 ProductDto，不再直接返回 Product entity
+    public async Task<ActionResult<ProductDto>> GetById(int id)
     {
         var product = await _context.Products.FindAsync(id);
 
         if (product == null)
             return NotFound();
 
-        // CHANGED: Entity -> DTO
         var result = new ProductDto
         {
             Id = product.Id,
@@ -38,9 +53,8 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateProductDto dto) // CHANGED: 不再直接接收 Product entity，改为接收 CreateProductDto
+    public async Task<IActionResult> Create(CreateProductDto dto)
     {
-        // NEW: DTO -> Entity
         var product = new Product
         {
             Name = dto.Name,
@@ -51,7 +65,6 @@ public class ProductsController : ControllerBase
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
 
-        // NEW: 返回 DTO，而不是直接返回 entity
         var result = new ProductDto
         {
             Id = product.Id,

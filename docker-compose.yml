@@ -90,3 +90,13 @@ services:
       - productservice
       - orderservice
       - paymentservice
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    depends_on:
+      - apigateway

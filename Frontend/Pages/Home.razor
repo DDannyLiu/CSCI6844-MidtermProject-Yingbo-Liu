@@ -1,0 +1,62 @@
+﻿@page "/"
+@using Frontend.Models
+@using Frontend.Services
+@inject ApiService Api
+@inject NavigationManager Nav
+
+<PageTitle>Dashboard</PageTitle>
+
+<h1 class="mb-4">Dashboard</h1>
+
+<p class="text-muted">This dashboard provides quick access to products, customers, and orders.</p>
+
+@if (products == null || customers == null || orders == null)
+{
+    <p>Loading dashboard...</p>
+}
+else
+{
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card p-3">
+                <h5>Total Products</h5>
+                <p class="fs-4">@products.Count</p>
+                <button class="btn btn-primary" @onclick='() => GoTo("/products")'>Go to Products</button>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card p-3">
+                <h5>Total Customers</h5>
+                <p class="fs-4">@customers.Count</p>
+                <button class="btn btn-primary" @onclick='() => GoTo("/customers")'>Go to Customers</button>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card p-3">
+                <h5>Total Orders</h5>
+                <p class="fs-4">@orders.Count</p>
+                <button class="btn btn-primary" @onclick='() => GoTo("/orders")'>Go to Orders</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<ProductDto>? products;
+    private List<CustomerDto>? customers;
+    private List<OrderDto>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Api.GetProductsAsync();
+        customers = await Api.GetCustomersAsync();
+        orders = await Api.GetOrdersAsync();
+    }
+
+    private void GoTo(string url)
+    {
+        Nav.NavigateTo(url);
+    }
+}
